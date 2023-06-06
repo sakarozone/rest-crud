@@ -14,10 +14,13 @@ func init() {
 
 func main() {
 	r := gin.Default()
-	r.POST("/create", controllers.CreateMovie)
-	r.GET("/get", controllers.GetMovie)
-	r.GET("/get/:id", controllers.GetMovieById)
-	r.PUT("/update/:id", controllers.UpdateMovie)
-	r.DELETE("/delete/:id", controllers.DeleteMovie)
+	r.POST("/signup", controllers.Signup)
+	r.POST("/createmovie", controllers.CreateMovie)
+	r.GET("/listmovie", controllers.GetMovie)
+	r.GET("/listmovie/:id", controllers.GetMovieById)
+	r.PUT("/updatemovie/:id", controllers.UpdateMovie)
+	r.DELETE("/deletemovie/:id", controllers.DeleteMovie)
 	r.Run()
 }
+
+// testpass is password for sakar@test.com

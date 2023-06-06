@@ -22,7 +22,7 @@ func CreateMovie(c *gin.Context) {
 	movie := model.MovieTable{ID: body.ID, Name: body.Name, Year: body.Year, Director: body.Director, Rating: body.Rating}
 	result := config.DB.Create(&movie)
 	if result.Error != nil {
-		c.JSON(400, gin.H{"error is": result.Error.Error()})
+		c.JSON(400, gin.H{"error": result.Error.Error()})
 		return
 	}
 	var createdMovie model.MovieTable
