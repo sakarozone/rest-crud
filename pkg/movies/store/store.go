@@ -2,7 +2,7 @@ package store
 
 import (
 	"learngo/restapiserver/pkg/common/db"
-	model "learngo/restapiserver/pkg/models"
+	model "learngo/restapiserver/pkg/movies/models"
 
 	"gorm.io/gorm"
 )

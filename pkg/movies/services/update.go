@@ -1,7 +1,7 @@
 package services
 
 import (
-	model "learngo/restapiserver/pkg/models"
+	model "learngo/restapiserver/pkg/movies/models"
 	"learngo/restapiserver/pkg/movies/store"
 )
 

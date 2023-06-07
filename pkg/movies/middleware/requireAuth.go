@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"learngo/restapiserver/pkg/common/db"
-	model "learngo/restapiserver/pkg/models"
+	model "learngo/restapiserver/pkg/movies/models"
 	"os"
 	"time"
 

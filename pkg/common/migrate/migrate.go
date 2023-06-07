@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"learngo/restapiserver/pkg/common/db"
-	model "learngo/restapiserver/pkg/models"
 	config "learngo/restapiserver/pkg/movies/configs"
+	model "learngo/restapiserver/pkg/movies/models"
 )
 
 func init() {

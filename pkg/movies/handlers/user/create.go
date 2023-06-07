@@ -2,7 +2,7 @@ package usercontrollers
 
 import (
 	"learngo/restapiserver/pkg/common/db"
-	model "learngo/restapiserver/pkg/models"
+	model "learngo/restapiserver/pkg/movies/models"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
