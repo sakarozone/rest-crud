@@ -1,9 +1,9 @@
 package main
 
 import (
-	"learn"
 	config "learngo/restapiserver/configs"
 	controllers "learngo/restapiserver/controllers/movie"
+	usercontrollers "learngo/restapiserver/controllers/user"
 	"learngo/restapiserver/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -16,9 +16,9 @@ func init() {
 
 func main() {
 	r := gin.Default()
-	r.POST("/signup", controllers.Signup)
-	r.POST("/login", controllers.Login)
-	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
+	r.POST("/signup", usercontrollers.Signup)
+	r.POST("/login", usercontrollers.Login)
+	r.GET("/validate", middleware.RequireAuth, usercontrollers.Validate)
 	r.POST("/movie", middleware.RequireAuth, controllers.CreateMovie)
 	r.GET("/movie", middleware.RequireAuth, controllers.GetMovie)
 	r.GET("/movie/:id", middleware.RequireAuth, controllers.GetMovieById)

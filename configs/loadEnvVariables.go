@@ -9,13 +9,14 @@ import (
 	"gorm.io/gorm"
 )
 
-func LoadEnvVariables(){
-	err:=godotenv.Load()
+func LoadEnvVariables() {
+	err := godotenv.Load()
 
-	if(err != nil){
+	if err != nil {
 		log.Fatal("Error loading env file")
 	}
 }
+
 var DB *gorm.DB
 
 func ConnectToDB() {
@@ -31,5 +32,8 @@ func ConnectToDB() {
 	if err != nil {
 		panic("Failed to get underlying *sql.DB")
 	}
-	fmt.Println("DB connected at: ",sqlDB)
+	fmt.Println("DB connected at: ", sqlDB)
+}
+func Close() {
+
 }
