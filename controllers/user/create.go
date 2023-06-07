@@ -1,4 +1,4 @@
-package controllers
+package usercontrollers
 
 import (
 	config "learngo/restapiserver/configs"
@@ -36,22 +36,5 @@ func Signup(c *gin.Context) {
 
 	//Send a response
 	c.JSON(200, gin.H{"data": "Created successfully"})
-
-}
-
-func Login(c *gin.Context) {
-	//Get email and pass from the body
-
-	var body struct {
-		Email    string
-		Password string
-	}
-	c.Bind(&body)
-
-	//Check for the user in the database
-
-	//Check if the password matches
-
-	//Create a new jwt token
 
 }
