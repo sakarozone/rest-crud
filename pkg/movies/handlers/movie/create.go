@@ -1,8 +1,9 @@
 package controllers
 
 import (
-	model "learngo/restapiserver/models"
-	"learngo/restapiserver/services"
+	// model "learngo/restapiserver/pkg/models"
+	model "learngo/restapiserver/pkg/models"
+	"learngo/restapiserver/pkg/movies/services"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"learngo/restapiserver/services"
+	"learngo/restapiserver/pkg/movies/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

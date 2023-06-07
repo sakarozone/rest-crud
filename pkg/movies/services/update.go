@@ -1,8 +1,8 @@
 package services
 
 import (
-	model "learngo/restapiserver/models"
-	"learngo/restapiserver/store"
+	model "learngo/restapiserver/pkg/models"
+	"learngo/restapiserver/pkg/movies/store"
 )
 
 func UpdateMovie(id int, updatedMovie model.MovieTable) error {

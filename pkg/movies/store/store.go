@@ -1,8 +1,8 @@
 package store
 
 import (
-	config "learngo/restapiserver/configs"
-	model "learngo/restapiserver/models"
+	"learngo/restapiserver/pkg/common/db"
+	model "learngo/restapiserver/pkg/models"
 
 	"gorm.io/gorm"
 )
@@ -21,7 +21,7 @@ type store struct {
 var movieStore Store
 
 func NewStore() Store {
-	db, err := config.ConnectToDB()
+	db, err := db.ConnectToDB()
 	if err != nil {
 		panic("Failed to connect to database: " + err.Error())
 	}

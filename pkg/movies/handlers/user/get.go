@@ -1,8 +1,8 @@
 package usercontrollers
 
 import (
-	config "learngo/restapiserver/configs"
-	model "learngo/restapiserver/models"
+	"learngo/restapiserver/pkg/common/db"
+	model "learngo/restapiserver/pkg/models"
 	"os"
 	"time"
 
@@ -21,7 +21,12 @@ func Login(c *gin.Context) {
 
 	//Check for the user in the database
 	var user model.User
-	config.DB.First(&user, "email= ?", body.Email)
+
+	db, err := db.ConnectToDB()
+	if err != nil {
+		panic("Failed to connect to database: " + err.Error())
+	}
+	db.First(&user, "email= ?", body.Email)
 
 	if user.Email == "" {
 		c.JSON(400, gin.H{"error": "User not found"})
@@ -30,7 +35,7 @@ func Login(c *gin.Context) {
 
 	//Check if the password matches
 
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 
 	if err != nil {
 		c.JSON(400, gin.H{"error": "Invalid password"})

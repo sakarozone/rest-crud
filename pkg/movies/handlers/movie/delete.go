@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"learngo/restapiserver/services"
+	"learngo/restapiserver/pkg/movies/services"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -12,8 +12,6 @@ func DeleteMovie(c *gin.Context) {
 	//get the id from the url
 	id := c.Param(("id"))
 
-	//Delete the movie
-	// config.DB.Delete(&model.MovieTable{}, id)
 	num, err := strconv.Atoi(id)
 	if err != nil {
 		fmt.Println("Error:", err)

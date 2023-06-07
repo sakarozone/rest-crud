@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"fmt"
-	config "learngo/restapiserver/configs"
-	model "learngo/restapiserver/models"
+	"learngo/restapiserver/pkg/common/db"
+	model "learngo/restapiserver/pkg/models"
 	"os"
 	"time"
 
@@ -31,7 +31,14 @@ func RequireAuth(c *gin.Context) {
 
 		//Find the user with token
 		var user model.User
-		config.DB.First(&user, "email=?", claims["email"])
+		fmt.Println("here")
+		db, err := db.ConnectToDB()
+		if err != nil {
+			panic("Failed to connect to database: " + err.Error())
+		}
+
+		db.First(&user, "email=?", claims["email"])
+		fmt.Println("next here")
 
 		if user.Email == "" {
 			c.AbortWithStatusJSON(401, gin.H{"error": "Unauthorised"})

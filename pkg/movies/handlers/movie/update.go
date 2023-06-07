@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"fmt"
-	model "learngo/restapiserver/models"
-	"learngo/restapiserver/services"
+	model "learngo/restapiserver/pkg/models"
+	"learngo/restapiserver/pkg/movies/services"
 	"net/http"
 	"strconv"
 
