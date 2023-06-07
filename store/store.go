@@ -1,38 +1,50 @@
 package store
 
 import (
+	config "learngo/restapiserver/configs"
 	model "learngo/restapiserver/models"
 
 	"gorm.io/gorm"
 )
 
 type Store interface {
-	CreateMovie(movie *model.MovieTable) error
-	UpdateMovie(initialMovie, updatedMovie *model.MovieTable) error
+	CreateMovie(movie model.MovieTable) error
+	UpdateMovie(initialMovie, updatedMovie model.MovieTable) error
 	ListMovies() (error, []model.MovieTable)
-	ListOneMovie() (error, model.MovieTable)
+	ListOneMovie(id int) (error, model.MovieTable)
 	DeleteMovie(id int) error
 }
 type store struct {
-	DB gorm.DB
+	DB *gorm.DB
 }
 
 var movieStore Store
 
-// func NewStore() Store {
-// 	return &store{
-// 		DB: config.GetMongoDB().Collection("filters"),
-// 	}
+func NewStore() Store {
+	db, err := config.ConnectToDB()
+	if err != nil {
+		panic("Failed to connect to database: " + err.Error())
+	}
+	return &store{
+		DB: db,
+	}
+}
+
+// func SetStore(s Store) {
+// 	movieStore = s
 // }
 
-func SetStore(s Store) {
-	movieStore = s
+func GetStore() Store {
+	if movieStore == nil {
+		movieStore = NewStore()
+	}
+	return movieStore
 }
 
-func (s *store) CreateMovie(movie *model.MovieTable) error {
+func (s *store) CreateMovie(movie model.MovieTable) error {
 	return s.DB.Create(movie).Error
 }
-func (s *store) UpdateMovie(initialMovie, updatedMovie *model.MovieTable) error {
+func (s *store) UpdateMovie(initialMovie, updatedMovie model.MovieTable) error {
 	return s.DB.Model(&initialMovie).Updates(updatedMovie).Error
 }
 
@@ -45,7 +57,8 @@ func (s *store) ListMovies() (error, []model.MovieTable) {
 	return s.DB.Find(&movies).Error, movies
 }
 
-func (s *store) ListOneMovie() (error, model.MovieTable) {
+func (s *store) ListOneMovie(id int) (error, model.MovieTable) {
 	var movie model.MovieTable
-	return s.DB.First(&movie).Error, movie
+	return s.DB.First(&movie, id).Error, movie
+
 }

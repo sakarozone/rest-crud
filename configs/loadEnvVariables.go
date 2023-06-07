@@ -19,20 +19,21 @@ func LoadEnvVariables() {
 
 var DB *gorm.DB
 
-func ConnectToDB() {
+func ConnectToDB() (*gorm.DB, error) {
 	dsn := "root:password@tcp(localhost:3306)/Movies?charset=utf8mb4&parseTime=True&loc=Local"
-	var err error
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		// Logger: logger.Default.LogMode(logger.Silent),
 	})
 	if err != nil {
-		panic("Failed to connect to database" + err.Error())
+		return nil, fmt.Errorf("failed to connect to the database: %w", err)
 	}
 	sqlDB, err := DB.DB()
 	if err != nil {
-		panic("Failed to get underlying *sql.DB")
+		return nil, fmt.Errorf("failed to get underlying *sql.DB: %w", err)
 	}
-	fmt.Println("DB connected at: ", sqlDB)
+
+	fmt.Println("DB connected at:", sqlDB)
+	return DB, nil
 }
 func Close() {
 

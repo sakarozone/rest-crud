@@ -1,8 +1,11 @@
 package controllers
 
 import (
-	config "learngo/restapiserver/configs"
+	"fmt"
 	model "learngo/restapiserver/models"
+	"learngo/restapiserver/services"
+	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,24 +23,30 @@ func UpdateMovie(c *gin.Context) {
 	}
 	c.Bind(&body)
 
-	//Find the movie to update
-	var movie model.MovieTable
-	config.DB.First(&movie, id)
+	num, err := strconv.Atoi(id)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
 
-	//Update the movie
-	result := config.DB.Model(&movie).Updates(model.MovieTable{
+	movie := model.MovieTable{
+		ID:       body.ID,
 		Name:     body.Name,
 		Year:     body.Year,
 		Director: body.Director,
 		Rating:   body.Rating,
-	})
+	}
 
-	//return it
-	var updatedMovie model.MovieTable
-	result.Scan(&updatedMovie)
+	err = services.UpdateMovie(num, movie)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"movie": err.Error(),
+		})
+	}
 
 	c.JSON(200, gin.H{
-		"movie": updatedMovie,
+		"message": "Updated successfully",
 	})
 
 }

@@ -19,11 +19,11 @@ func main() {
 	r.POST("/signup", usercontrollers.Signup)
 	r.POST("/login", usercontrollers.Login)
 	r.GET("/validate", middleware.RequireAuth, usercontrollers.Validate)
-	r.POST("/movie", middleware.RequireAuth, controllers.CreateMovie)
-	r.GET("/movie", middleware.RequireAuth, controllers.GetMovie)
-	r.GET("/movie/:id", middleware.RequireAuth, controllers.GetMovieById)
-	r.PUT("/movie/:id", middleware.RequireAuth, controllers.UpdateMovie)
-	r.DELETE("/movie/:id", middleware.RequireAuth, controllers.DeleteMovie)
+	r.POST("/movie", controllers.CreateMovie)
+	r.GET("/movie", controllers.GetMovie)
+	r.GET("/movie/:id", controllers.GetMovieById)
+	r.PUT("/movie/:id", controllers.UpdateMovie)
+	r.DELETE("/movie/:id", controllers.DeleteMovie)
 	r.Run()
 }
 
