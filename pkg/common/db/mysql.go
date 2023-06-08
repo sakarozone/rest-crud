@@ -2,6 +2,8 @@ package db
 
 import (
 	"fmt"
+	config "learngo/restapiserver/pkg/movies/configs"
+	"log"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -9,8 +11,12 @@ import (
 
 var DB *gorm.DB
 
-func ConnectToDB() (*gorm.DB, error) {
-	dsn := "root:password@tcp(localhost:3306)/Movies?charset=utf8mb4&parseTime=True&loc=Local"
+func ReturnDB() (*gorm.DB, error) {
+	config, err := config.ReadConfig()
+	if err != nil {
+		log.Fatal("Cannot load config", err.Error())
+	}
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.DBUser, config.DBPass, config.DBLink, config.DBPort, config.DBName)
 	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		// Logger: logger.Default.LogMode(logger.Silent),
 	})

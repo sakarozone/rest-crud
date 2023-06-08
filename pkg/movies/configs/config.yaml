@@ -1,0 +1,7 @@
+PORT: 3001
+SECRET_KEY: thisIsAtetsRandomSecretKeylskdafjlaksdjflaj2390234slkjaLKJlskdALSNMf
+DB_USER: root
+DB_PASS: password
+DB_PORT: 3306
+DB_NAME: Movies
+DB_LINK: localhost

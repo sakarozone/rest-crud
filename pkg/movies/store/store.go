@@ -21,7 +21,7 @@ type store struct {
 var movieStore Store
 
 func NewStore() Store {
-	db, err := db.ConnectToDB()
+	db, err := db.ReturnDB()
 	if err != nil {
 		panic("Failed to connect to database: " + err.Error())
 	}

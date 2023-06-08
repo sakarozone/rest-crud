@@ -6,13 +6,14 @@ import (
 	handlers "learngo/restapiserver/pkg/movies/handlers/movie"
 	usercontrollers "learngo/restapiserver/pkg/movies/handlers/user"
 	"learngo/restapiserver/pkg/movies/middleware"
+	"log"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func init() {
-	config.LoadEnvVariables()
-	db.ConnectToDB()
+	db.ReturnDB()
 }
 
 func InitRoutes(adminRoutes *gin.RouterGroup) {
@@ -53,10 +54,15 @@ func InitRoutes(adminRoutes *gin.RouterGroup) {
 }
 
 func main() {
+	config, err := config.ReadConfig()
+
+	if err != nil {
+		log.Fatal("Cannot load config", err.Error())
+	}
 	r := gin.Default()
 	adminRoutes := r.Group("")
 	InitRoutes(adminRoutes)
-	r.Run()
+	r.Run(":" + strconv.Itoa(config.Port))
 }
 
 // {

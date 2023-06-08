@@ -38,7 +38,7 @@ func RequireAuth(c *gin.Context) {
 		//Find the user with token
 		var user model.User
 		fmt.Println("here")
-		db, err := db.ConnectToDB()
+		db, err := db.ReturnDB()
 		if err != nil {
 			panic("Failed to connect to database: " + err.Error())
 		}

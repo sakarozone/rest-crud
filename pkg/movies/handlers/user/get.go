@@ -2,9 +2,10 @@ package usercontrollers
 
 import (
 	"learngo/restapiserver/pkg/common/db"
+	config "learngo/restapiserver/pkg/movies/configs"
 	model "learngo/restapiserver/pkg/movies/models"
+	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -13,12 +14,18 @@ import (
 )
 
 func Login(c *gin.Context) {
+	config, err := config.ReadConfig()
+
+	if err != nil {
+		log.Fatal("Cannot load config", err.Error())
+	}
+
 	//Get email and pass from the body
 	var body struct {
 		Email    string
 		Password string
 	}
-	err := c.Bind(&body)
+	err = c.Bind(&body)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Payload"})
@@ -28,7 +35,7 @@ func Login(c *gin.Context) {
 	//Check for the user in the database
 	var user model.User
 
-	db, err := db.ConnectToDB()
+	db, err := db.ReturnDB()
 	if err != nil {
 		panic("Failed to connect to database: " + err.Error())
 	}
@@ -55,7 +62,7 @@ func Login(c *gin.Context) {
 		"expires": time.Now().Add(time.Hour * 24 * 7).Unix(),
 	})
 
-	tokenStringVal, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
+	tokenStringVal, err := token.SignedString([]byte(config.SecretKey))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

@@ -32,7 +32,7 @@ func Signup(c *gin.Context) {
 	}
 	//Create the user
 	user := model.User{Email: body.Email, Password: string(hash)}
-	db, err := db.ConnectToDB()
+	db, err := db.ReturnDB()
 	if err != nil {
 		panic("Failed to connect to database: " + err.Error())
 	}
