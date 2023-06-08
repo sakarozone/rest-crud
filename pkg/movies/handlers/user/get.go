@@ -18,7 +18,12 @@ func Login(c *gin.Context) {
 		Email    string
 		Password string
 	}
-	c.Bind(&body)
+	err := c.Bind(&body)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Payload"})
+		return
+	}
 
 	//Check for the user in the database
 	var user model.User

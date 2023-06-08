@@ -1,4 +1,4 @@
-package controllers
+package handlers
 
 import (
 	"fmt"
@@ -10,31 +10,19 @@ import (
 )
 
 func (h *Handler) UpdateMovie(c *gin.Context) {
-	//Get id fom the url
 	id := c.Param(("id"))
-	//Get data from body
-	var body struct {
-		ID       uint
-		Name     string
-		Year     uint
-		Director string
-		Rating   uint
+	req := model.CreateMovieRequest{}
+	err := c.Bind(&req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Payload"})
+		return
 	}
-	c.Bind(&body)
-
 	num, err := strconv.Atoi(id)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
-
-	movie := model.MovieTable{
-		ID:       body.ID,
-		Name:     body.Name,
-		Year:     body.Year,
-		Director: body.Director,
-		Rating:   body.Rating,
-	}
+	movie := req.ToMovie()
 
 	err = h.Service.UpdateMovie(num, movie)
 

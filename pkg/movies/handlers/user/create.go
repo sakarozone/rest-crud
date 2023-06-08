@@ -16,7 +16,12 @@ func Signup(c *gin.Context) {
 		Email    string
 		Password string
 	}
-	c.Bind(&body)
+	err := c.Bind(&body)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Payload"})
+		return
+	}
 
 	//Hash the password
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)

@@ -1,4 +1,4 @@
-package controllers
+package handlers
 
 import "learngo/restapiserver/pkg/movies/services"
 

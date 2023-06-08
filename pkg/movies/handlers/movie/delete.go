@@ -1,4 +1,4 @@
-package controllers
+package handlers
 
 import (
 	"fmt"
@@ -9,7 +9,6 @@ import (
 )
 
 func (h *Handler) DeleteMovie(c *gin.Context) {
-	//get the id from the url
 	id := c.Param(("id"))
 
 	num, err := strconv.Atoi(id)

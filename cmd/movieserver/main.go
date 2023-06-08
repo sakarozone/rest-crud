@@ -3,7 +3,7 @@ package main
 import (
 	"learngo/restapiserver/pkg/common/db"
 	config "learngo/restapiserver/pkg/movies/configs"
-	controllers "learngo/restapiserver/pkg/movies/handlers/movie"
+	handlers "learngo/restapiserver/pkg/movies/handlers/movie"
 	usercontrollers "learngo/restapiserver/pkg/movies/handlers/user"
 	"learngo/restapiserver/pkg/movies/middleware"
 
@@ -16,7 +16,7 @@ func init() {
 }
 
 func InitRoutes(adminRoutes *gin.RouterGroup) {
-	mh := controllers.New()
+	mh := handlers.New()
 	movieRoute := adminRoutes.Group("/movies")
 	baseRoute := adminRoutes.Group("")
 	baseRouteAuth := adminRoutes.Group("")
