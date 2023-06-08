@@ -3,22 +3,21 @@ package controllers
 import (
 	// model "learngo/restapiserver/pkg/movies/models"
 	model "learngo/restapiserver/pkg/movies/models"
-	"learngo/restapiserver/pkg/movies/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func CreateMovie(c *gin.Context) {
+func (h *Handler) CreateMovie(c *gin.Context) {
 	//Get data from request body
-	var body struct {
+	var body struct { ///make model out of it
 		ID       uint
 		Name     string
 		Year     uint
 		Director string
 		Rating   uint
 	}
-	c.Bind(&body)
+	c.Bind(&body) //error handling change name to req
 	movie := model.MovieTable{
 		ID:       body.ID,
 		Name:     body.Name,
@@ -27,7 +26,7 @@ func CreateMovie(c *gin.Context) {
 		Rating:   body.Rating,
 	}
 
-	err := services.CreateMovie(movie)
+	err := h.Service.CreateMovie(movie)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

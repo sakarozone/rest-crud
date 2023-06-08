@@ -2,11 +2,10 @@ package services
 
 import (
 	model "learngo/restapiserver/pkg/movies/models"
-	"learngo/restapiserver/pkg/movies/store"
 )
 
-func ListMovies() (error, []model.MovieTable) {
-	err, movie := store.GetStore().ListMovies()
+func (s *service) ListMovies() (error, []model.MovieTable) {
+	err, movie := s.store.ListMovies()
 	if err != nil {
 		return err, nil
 	}

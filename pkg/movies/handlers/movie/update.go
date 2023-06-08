@@ -3,14 +3,13 @@ package controllers
 import (
 	"fmt"
 	model "learngo/restapiserver/pkg/movies/models"
-	"learngo/restapiserver/pkg/movies/services"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-func UpdateMovie(c *gin.Context) {
+func (h *Handler) UpdateMovie(c *gin.Context) {
 	//Get id fom the url
 	id := c.Param(("id"))
 	//Get data from body
@@ -37,7 +36,7 @@ func UpdateMovie(c *gin.Context) {
 		Rating:   body.Rating,
 	}
 
-	err = services.UpdateMovie(num, movie)
+	err = h.Service.UpdateMovie(num, movie)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{

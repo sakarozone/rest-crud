@@ -16,26 +16,28 @@ func init() {
 }
 
 func InitRoutes(adminRoutes *gin.RouterGroup) {
+	mh := controllers.New()
 	movieRoute := adminRoutes.Group("/movies")
 	baseRoute := adminRoutes.Group("")
 	baseRouteAuth := adminRoutes.Group("")
 	movieRoute.Use(middleware.RequireAuth)
 	baseRouteAuth.Use(middleware.RequireAuth)
+
 	{
 		movieRoute.POST("",
-			controllers.CreateMovie,
+			mh.CreateMovie,
 		)
 		movieRoute.GET("",
-			controllers.GetMovie,
+			mh.GetMovie,
 		)
 		movieRoute.GET("/:id",
-			controllers.GetMovieById,
+			mh.GetMovieById,
 		)
 		movieRoute.DELETE("/:id",
-			controllers.DeleteMovie,
+			mh.DeleteMovie,
 		)
 		movieRoute.PUT("/:id",
-			controllers.UpdateMovie,
+			mh.UpdateMovie,
 		)
 		baseRoute.POST("/signup",
 			usercontrollers.Signup,

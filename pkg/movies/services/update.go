@@ -5,8 +5,8 @@ import (
 	"learngo/restapiserver/pkg/movies/store"
 )
 
-func UpdateMovie(id int, updatedMovie model.MovieTable) error {
-	err, movie := store.GetStore().ListOneMovie(id)
+func (s *service) UpdateMovie(id int, updatedMovie model.MovieTable) error {
+	err, movie := s.store.ListOneMovie(id)
 
 	if err != nil {
 		return err
