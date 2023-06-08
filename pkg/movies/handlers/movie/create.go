@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	// model "learngo/restapiserver/pkg/movies/models"
-
 	model "learngo/restapiserver/pkg/movies/models"
 	"net/http"
 

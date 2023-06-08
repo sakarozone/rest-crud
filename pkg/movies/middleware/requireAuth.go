@@ -3,9 +3,10 @@ package middleware
 import (
 	"fmt"
 	"learngo/restapiserver/pkg/common/db"
+	config "learngo/restapiserver/pkg/movies/configs"
 	model "learngo/restapiserver/pkg/movies/models"
+	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -19,16 +20,25 @@ func RequireAuth(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization token not found"})
 		return
 	}
+	config, err := config.ReadConfig()
 
+	if err != nil {
+		log.Fatal("Cannot load config", err.Error())
+	}
 	//validate it
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(os.Getenv("SECRET_KEY")), nil
+		return []byte(config.SecretKey), nil
 	})
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		fmt.Println("HERE")
 		//check the expiry
 		if float64(time.Now().Unix()) > claims["expires"].(float64) {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token expired"})
@@ -52,10 +62,9 @@ func RequireAuth(c *gin.Context) {
 
 		c.Set("user", user)
 	} else {
+		fmt.Println("HERE1")
 		fmt.Println(err)
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 	}
-	//Continue
-	fmt.Println("This message is from the middleware")
 	c.Next()
 }

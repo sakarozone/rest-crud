@@ -10,7 +10,7 @@ import (
 type Store interface {
 	CreateMovie(movie model.MovieTable) error
 	UpdateMovie(initialMovie, updatedMovie model.MovieTable) error
-	ListMovies() (error, []model.MovieTable)
+	ListMovies(page, pagesize, offset int) (error, []model.MovieTable)
 	ListOneMovie(id int) (error, model.MovieTable)
 	DeleteMovie(id int) error
 }
@@ -52,13 +52,14 @@ func (s *store) DeleteMovie(id int) error {
 	return s.DB.Delete(&model.MovieTable{}, id).Error
 }
 
-func (s *store) ListMovies() (error, []model.MovieTable) {
+func (s *store) ListMovies(page, pagesize, offset int) (error, []model.MovieTable) {
 	var movies []model.MovieTable
-	return s.DB.Find(&movies).Error, movies
+	return s.DB.Offset(offset).Limit(pagesize).Find(&movies).Error, movies
 }
 
 func (s *store) ListOneMovie(id int) (error, model.MovieTable) {
 	var movie model.MovieTable
+
 	return s.DB.First(&movie, id).Error, movie
 
 }

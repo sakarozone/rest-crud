@@ -8,7 +8,7 @@ import (
 type Service interface {
 	CreateMovie(movie model.MovieTable) error
 	UpdateMovie(id int, updatedMovie model.MovieTable) error
-	ListMovies() (error, []model.MovieTable)
+	ListMovies(page, pagesize int) (error, []model.MovieTable)
 	ListOneMovie(id int) (error, model.MovieTable)
 	DeleteMovie(id int) error
 }
