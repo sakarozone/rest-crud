@@ -1,13 +1,15 @@
 package usercontrollers
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
 func Validate(c *gin.Context) {
 	user, _ := c.Get("user")
 
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"Message": user,
 	})
 }

@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"learngo/restapiserver/pkg/movies/services"
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -24,7 +25,7 @@ func DeleteMovie(c *gin.Context) {
 		return
 	}
 	//return the status
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"status": "Deleted successfully",
 	})
 }

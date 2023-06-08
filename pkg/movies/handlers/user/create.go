@@ -3,6 +3,7 @@ package usercontrollers
 import (
 	"learngo/restapiserver/pkg/common/db"
 	model "learngo/restapiserver/pkg/movies/models"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -21,7 +22,7 @@ func Signup(c *gin.Context) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
 
 	if err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	//Create the user
@@ -33,11 +34,11 @@ func Signup(c *gin.Context) {
 	result := db.Create(&user)
 
 	if result.Error != nil {
-		c.JSON(400, gin.H{"error": result.Error.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": result.Error.Error()})
 		return
 	}
 
 	//Send a response
-	c.JSON(200, gin.H{"data": "Created successfully"})
+	c.JSON(http.StatusOK, gin.H{"data": "Created successfully"})
 
 }

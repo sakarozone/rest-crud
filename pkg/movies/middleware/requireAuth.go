@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"learngo/restapiserver/pkg/common/db"
 	model "learngo/restapiserver/pkg/movies/models"
+	"net/http"
 	"os"
 	"time"
 
@@ -13,6 +14,11 @@ import (
 
 func RequireAuth(c *gin.Context) {
 	tokenString := c.GetHeader("Authorization")
+
+	if tokenString == "" {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization token not found"})
+		return
+	}
 
 	//validate it
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -25,7 +31,7 @@ func RequireAuth(c *gin.Context) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		//check the expiry
 		if float64(time.Now().Unix()) > claims["expires"].(float64) {
-			c.AbortWithStatusJSON(401, gin.H{"error": "Token expired"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token expired"})
 			return
 		}
 
@@ -41,14 +47,13 @@ func RequireAuth(c *gin.Context) {
 		fmt.Println("next here")
 
 		if user.Email == "" {
-			c.AbortWithStatusJSON(401, gin.H{"error": "Unauthorised"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorised"})
 		}
 
 		c.Set("user", user)
 	} else {
 		fmt.Println(err)
-		c.AbortWithStatusJSON(401, gin.H{"error": err.Error()})
-
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 	}
 	//Continue
 	fmt.Println("This message is from the middleware")

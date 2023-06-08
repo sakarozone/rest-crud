@@ -3,6 +3,7 @@ package usercontrollers
 import (
 	"learngo/restapiserver/pkg/common/db"
 	model "learngo/restapiserver/pkg/movies/models"
+	"net/http"
 	"os"
 	"time"
 
@@ -29,7 +30,7 @@ func Login(c *gin.Context) {
 	db.First(&user, "email= ?", body.Email)
 
 	if user.Email == "" {
-		c.JSON(400, gin.H{"error": "User not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
 		return
 	}
 
@@ -38,7 +39,7 @@ func Login(c *gin.Context) {
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 
 	if err != nil {
-		c.JSON(400, gin.H{"error": "Invalid password"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid password"})
 		return
 	}
 
@@ -52,11 +53,11 @@ func Login(c *gin.Context) {
 	tokenStringVal, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
 
 	if err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"token": tokenStringVal,
 	})
 

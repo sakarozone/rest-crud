@@ -4,6 +4,7 @@ import (
 	// model "learngo/restapiserver/pkg/movies/models"
 	model "learngo/restapiserver/pkg/movies/models"
 	"learngo/restapiserver/pkg/movies/services"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,11 +30,11 @@ func CreateMovie(c *gin.Context) {
 	err := services.CreateMovie(movie)
 
 	if err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	//return it
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"movie": "Movie created successfully",
 	})
 }
