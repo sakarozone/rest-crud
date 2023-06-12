@@ -3,12 +3,12 @@ package middleware
 import (
 	"fmt"
 	"learngo/restapiserver/pkg/common/db"
-	config "learngo/restapiserver/pkg/movies/configs"
+	config "learngo/restapiserver/configs"
 	model "learngo/restapiserver/pkg/movies/models"
 	"log"
 	"net/http"
 	"time"
-
+	
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 )

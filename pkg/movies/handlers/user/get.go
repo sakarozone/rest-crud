@@ -2,7 +2,7 @@ package usercontrollers
 
 import (
 	"learngo/restapiserver/pkg/common/db"
-	config "learngo/restapiserver/pkg/movies/configs"
+	config "learngo/restapiserver/configs"
 	model "learngo/restapiserver/pkg/movies/models"
 	"log"
 	"net/http"

@@ -2,7 +2,7 @@ package main
 
 import (
 	"learngo/restapiserver/pkg/common/db"
-	config "learngo/restapiserver/pkg/movies/configs"
+	config "learngo/restapiserver/configs"
 	handlers "learngo/restapiserver/pkg/movies/handlers/movie"
 	usercontrollers "learngo/restapiserver/pkg/movies/handlers/user"
 	"learngo/restapiserver/pkg/movies/middleware"
@@ -10,6 +10,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func init() {
@@ -60,6 +62,7 @@ func main() {
 		log.Fatal("Cannot load config", err.Error())
 	}
 	r := gin.Default()
+	r.GET("/docs/any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	adminRoutes := r.Group("")
 	InitRoutes(adminRoutes)
 	r.Run(":" + strconv.Itoa(config.Port))

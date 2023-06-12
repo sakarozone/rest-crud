@@ -1,0 +1,69 @@
+definitions:
+  learngo_restapiserver_pkg_movies_models.MovieTable:
+    properties:
+      director:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      rating:
+        type: integer
+      year:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /movies:
+    post:
+      consumes:
+      - application/json
+      description: Endpoint to create a Movie
+      parameters:
+      - description: MovieTable
+        in: body
+        name: Movies
+        required: true
+        schema:
+          $ref: '#/definitions/learngo_restapiserver_pkg_movies_models.MovieTable'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Movie created successfully
+          schema:
+            type: string
+        "404":
+          description: Movie could not be created
+          schema:
+            type: object
+      summary: Create a Movie
+      tags:
+      - Movies
+  /movies/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a movie with the specified ID
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+      summary: Delete a movie
+      tags:
+      - Movies
+swagger: "2.0"
