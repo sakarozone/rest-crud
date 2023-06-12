@@ -9,6 +9,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// UpdateMovie godoc
+// @Summary Update a movie
+// @Description Updates an existing movie
+// @Tags Movies
+// @Accept json
+// @Produce json
+// @Param id path int true "Movie ID"
+// @Param movie body model.CreateMovieRequest true "Movie object"
+// @Success 200 {object} object
+// @Failure 400 {object} object
+// @Failure 404 {object} object
+// @Failure 401 {object} object 
+// @Router /movies/{id} [put]
 func (h *Handler) UpdateMovie(c *gin.Context) {
 	id := c.Param(("id"))
 	req := model.CreateMovieRequest{}

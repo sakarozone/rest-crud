@@ -22,6 +22,7 @@ type CreateMovieRequest struct {
 // @Param        Movies body model.MovieTable true "MovieTable"
 // @Success 200 {string}  "Movie created successfully"
 // @Failure      404  {object}   object "Movie could not be created"
+// @Failure 401 {object} object 
 // @Router       /movies [post]
 func (h *Handler) CreateMovie(c *gin.Context) {
 	req := model.CreateMovieRequest{}

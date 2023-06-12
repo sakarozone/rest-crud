@@ -8,6 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetMovie godoc
+// @Summary Get a list of movies
+// @Description Retrieves a paginated list of movies
+// @Tags Movies
+// @Accept json
+// @Produce json
+// @Param page query int false "Page number (default: 1)"
+// @Param pageSize query int false "Page size (default: 10)"
+// @Success 200 {object} object 
+// @Failure 500 {object} object
+// @Failure 401 {object} object 
+// @Router /movies [get]
 func (h *Handler) GetMovie(c *gin.Context) {
 	pageStr := c.Query("page")
 	page, err := strconv.Atoi(pageStr)

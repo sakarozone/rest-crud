@@ -1,4 +1,17 @@
 definitions:
+  learngo_restapiserver_pkg_movies_models.CreateMovieRequest:
+    properties:
+      director:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      rating:
+        type: integer
+      year:
+        type: integer
+    type: object
   learngo_restapiserver_pkg_movies_models.MovieTable:
     properties:
       director:
@@ -16,6 +29,37 @@ info:
   contact: {}
 paths:
   /movies:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a paginated list of movies
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Page size (default: 10)'
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: object
+      summary: Get a list of movies
+      tags:
+      - Movies
     post:
       consumes:
       - application/json
@@ -34,6 +78,10 @@ paths:
           description: Movie created successfully
           schema:
             type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
         "404":
           description: Movie could not be created
           schema:
@@ -63,7 +111,81 @@ paths:
           description: Bad Request
           schema:
             type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
       summary: Delete a movie
+      tags:
+      - Movies
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a movie by its ID
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: object
+      summary: Get a movie by ID
+      tags:
+      - Movies
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing movie
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Movie object
+        in: body
+        name: movie
+        required: true
+        schema:
+          $ref: '#/definitions/learngo_restapiserver_pkg_movies_models.CreateMovieRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: object
+      summary: Update a movie
       tags:
       - Movies
 swagger: "2.0"
