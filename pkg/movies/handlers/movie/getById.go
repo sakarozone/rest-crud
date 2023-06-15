@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -21,20 +20,24 @@ import (
 // @Failure 404 {object} object
 // @Router /movies/{id} [get]
 func (h *Handler) GetMovieById(c *gin.Context) {
-	//get the id from the url
-	id := c.Param(("id"))
+	id := c.Param("id")
 
 	num, err := strconv.Atoi(id)
 	if err != nil {
-		fmt.Println("Error:", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid ID format",
+		})
 		return
 	}
 
 	err, movie := h.Service.ListOneMovie(num)
 	if err != nil {
-		fmt.Println("Error:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to retrieve the movie",
+		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"movie": movie,
 	})

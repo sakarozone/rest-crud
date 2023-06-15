@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -17,24 +16,27 @@ import (
 // @Param id path int true "Movie ID"
 // @Success 200 {object} object
 // @Failure 400 {object} object
-// @Failure 401 {object} object 
+// @Failure 401 {object} object
 // @Router /movies/{id} [delete]
-func (h *Handler) DeleteMovie(c *gin.Context) {
-	id := c.Param(("id"))
 
+func (h *Handler) DeleteMovie(c *gin.Context) {
+	id := c.Param("id")
 	num, err := strconv.Atoi(id)
 	if err != nil {
-		fmt.Println("Error:", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid movie ID",
+		})
+		return
+	}
+	err = h.Service.DeleteMovie(num)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to delete the movie",
+		})
 		return
 	}
 
-	err = h.Service.DeleteMovie(num)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-	//return the status
 	c.JSON(http.StatusOK, gin.H{
-		"status": "Deleted successfully",
+		"status": "Movie deleted successfully",
 	})
 }

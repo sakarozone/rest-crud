@@ -1,11 +1,11 @@
 package model
 
-type CreateMovieRequest struct { ///make model out of it
-	ID       uint
-	Name     string
-	Year     uint
-	Director string
-	Rating   uint
+type CreateMovieRequest struct {
+	ID       uint   `json:"ID" binding:"required"`
+	Name     string `json:"Name" binding:"required"`
+	Year     uint   `json:"Year" binding:"required"`
+	Director string `json:"Director" binding:"required"`
+	Rating   uint   `json:"Rating" binding:"required"`
 }
 
 func (r CreateMovieRequest) ToMovie() MovieTable {

@@ -20,7 +20,7 @@ import (
 // @Success 200 {object} object
 // @Failure 400 {object} object
 // @Failure 404 {object} object
-// @Failure 401 {object} object 
+// @Failure 401 {object} object
 // @Router /movies/{id} [put]
 func (h *Handler) UpdateMovie(c *gin.Context) {
 	id := c.Param(("id"))
@@ -33,6 +33,7 @@ func (h *Handler) UpdateMovie(c *gin.Context) {
 	num, err := strconv.Atoi(id)
 	if err != nil {
 		fmt.Println("Error:", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
 	movie := req.ToMovie()
@@ -43,6 +44,7 @@ func (h *Handler) UpdateMovie(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"movie": err.Error(),
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
