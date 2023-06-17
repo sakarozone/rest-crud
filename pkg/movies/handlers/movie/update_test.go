@@ -34,16 +34,16 @@ func TestUpdateMovieHandler(t *testing.T) {
 		},
 		// {
 		// 	name:           "invalid payload",
-		// 	id:             "1",
-		// 	payload:        model.CreateMovieRequest{ID: 1, Name: "", Year: 2022, Director: "Updated Director", Rating: 4},
-		// 	serviceError:   errors.New("Movie not found"),
+		// 	id:             "2",
+		// 	payload:        model.CreateMovieRequest{},
+		// 	serviceError:   errors.New("Invalid Payload"),
 		// 	expectedStatus: http.StatusBadRequest,
 		// 	expectedBody:   `{"error":"Invalid Payload"}`,
 		// },
 		// {
 		// 	name:           "invalid ID",
 		// 	id:             "invalid",
-		// 	payload:        model.CreateMovieRequest{Name: "Updated Movie", Year: 2022, Director: "Updated Director", Rating: 4},
+		// 	payload:        model.CreateMovieRequest{ID: 5, Name: "Updated Movie", Year: 2022, Director: "Updated Director", Rating: 4},
 		// 	serviceError:   nil,
 		// 	expectedStatus: http.StatusBadRequest,
 		// 	expectedBody:   `{"error":"Invalid ID"}`,
@@ -76,7 +76,7 @@ func TestUpdateMovieHandler(t *testing.T) {
 
 			// Mock the service response
 			mockService := handler.Service.(*mocks.Service)
-			mockService.On("UpdateMovie", mock.Anything, mock.AnythingOfType("model.MovieTable")).Return(tc.serviceError)
+			mockService.On("UpdateMovie", mock.Anything, mock.Anything).Return(tc.serviceError)
 
 			// Prepare the request payload
 			payloadBytes, _ := json.Marshal(tc.payload)

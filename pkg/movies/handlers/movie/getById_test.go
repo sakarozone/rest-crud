@@ -1,75 +1,82 @@
 package handlers_test
 
-// import (
-// 	handlers "learngo/restapiserver/pkg/movies/handlers/movie"
-// 	model "learngo/restapiserver/pkg/movies/models"
-// 	"learngo/restapiserver/pkg/movies/services/mocks"
-// 	"net/http"
-// 	"net/http/httptest"
-// 	"testing"
+import (
+	handlers "learngo/restapiserver/pkg/movies/handlers/movie"
+	model "learngo/restapiserver/pkg/movies/models"
+	"learngo/restapiserver/pkg/movies/services"
+	"learngo/restapiserver/pkg/movies/services/mocks"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 
-// 	"github.com/gin-gonic/gin"
-// 	"github.com/stretchr/testify/assert"
-// 	"github.com/stretchr/testify/mock"
-// )
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+)
 
-// func TestGetMovieByIdHandler(t *testing.T) {
-// 	testCases := []struct {
-// 		name            string
-// 		id              string
-// 		serviceResponse interface{}
-// 		expectedStatus  int
-// 		expectedBody    string
-// 	}{
-// 		{
-// 			name:            "success",
-// 			id:              "1",
-// 			serviceResponse: model.MovieTable{ID: 1, Name: "Test Movie", Year: 2021, Director: "Test Director", Rating: 5},
-// 			expectedStatus:  http.StatusOK,
-// 			expectedBody:    `{"movie":{"ID":1,"Name":"Test Movie","Year":2021,"Director":"Test Director","Rating":5}}`,
-// 		},
+func TestGetByIDMovieHandler(t *testing.T) {
+	testCases := []struct {
+		name          string
+		sS            services.Service
+		expStatusCode int
+		path          string
+		headers       map[string]string
+		preMW         gin.HandlerFunc
+	}{
+		{
+			name: "success",
+			sS: func() services.Service {
+				sS := new(mocks.Service)
+				sS.On("ListOneMovie", mock.Anything).Return(nil, model.MovieTable{
+					ID:       10,
+					Name:     "test",
+					Year:     12,
+					Director: "test",
+					Rating:   5,
+				})
+				return sS
+			}(),
+			expStatusCode: http.StatusOK,
+			path:          "/movies/1",
+			headers: map[string]string{
+				"Content-Type": "application/json",
+			},
+			preMW: gin.HandlerFunc(func(c *gin.Context) {
+				c.Set("User", model.User{
+					Email:    "test@test.com",
+					Password: "test",
+				})
+			}),
+		},
+	}
 
-// 		{
-// 			name:            "invalid ID format",
-// 			id:              "invalid",
-// 			serviceResponse: nil,
-// 			expectedStatus:  http.StatusBadRequest,
-// 			expectedBody:    `{"error":"Invalid ID format"}`,
-// 		},
-// 		{
-// 			name:            "error retrieving movie",
-// 			id:              "1",
-// 			serviceResponse: errors.New("failed to retrieve movie"),
-// 			expectedStatus:  http.StatusInternalServerError,
-// 			expectedBody:    `{"error":"Failed to retrieve the movie"}`,
-// 		},
-// 	}
+	for _, tC := range testCases {
+		t.Run(tC.name, func(t *testing.T) {
+			engine := gin.New()
+			sH := &handlers.Handler{}
+			sH.Service = tC.sS
+			engine.GET("/movies/:id", sH.GetMovieById)
+			testServer := httptest.NewServer(engine)
+			// defer testServer.Close()
 
-// 	for _, tc := range testCases {
-// 		t.Run(tc.name, func(t *testing.T) {
-// 			engine := gin.New()
-// 			handler := &handlers.Handler{
-// 				Service: &mocks.Service{},
-// 			}
-// 			engine.GET("/:id", handler.GetMovieById)
+			req, err := http.NewRequest(http.MethodGet, testServer.URL+tC.path, nil)
+			if err != nil {
+				t.Fatalf("failed to create request: %v", err)
+			}
 
-// 			// Mock the service response
-// 			mockService := handler.Service.(*mocks.Service)
-// 			mockService.On("ListOneMovie", mock.Anything).Return(tc.serviceResponse, nil)
+			for k, v := range tC.headers {
+				req.Header.Set(k, v)
+			}
 
-// 			// Perform the request
-// 			w := httptest.NewRecorder()
-// 			req, _ := http.NewRequest(http.MethodGet, "/"+tc.id, nil)
-// 			engine.ServeHTTP(w, req)
+			res, err := http.DefaultClient.Do(req)
+			if err != nil {
+				t.Fatalf("failed to send request: %v", err)
+			}
 
-// 			// Check the response status code
-// 			assert.Equal(t, tc.expectedStatus, w.Code)
+			defer res.Body.Close()
 
-// 			// Check the response body
-// 			assert.JSONEq(t, tc.expectedBody, w.Body.String())
-
-// 			// Assert expectations on the mock service
-// 			mockService.AssertExpectations(t)
-// 		})
-// 	}
-// }
+			assert.Equal(t, tC.expStatusCode, res.StatusCode, "got unexpected statusCode")
+			tC.sS.(*mocks.Service).AssertExpectations(t)
+		})
+	}
+}

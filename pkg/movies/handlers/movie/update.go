@@ -42,7 +42,7 @@ func (h *Handler) UpdateMovie(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
-			"movie": err.Error(),
+			"error": err.Error(),
 		})
 		return
 	}
