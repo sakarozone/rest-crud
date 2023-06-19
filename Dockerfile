@@ -1,8 +1,8 @@
-# FROM golang:1.16
+FROM golang:1.16
 
-# WORKDIR /app
-# COPY . .
+WORKDIR /app
+COPY . .
 
-# RUN go mod download
+RUN go mod download
 
-# CMD ["go", "run", "./cmd/movieserver/main.go"]
+CMD ["go", "run", "./cmd/movieserver/main.go"]
