@@ -19,7 +19,7 @@ type Config struct {
 func ReadConfig() (Config, error) {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("../../../../configs") // Set the directory path where the config file is located
+	viper.AddConfigPath("../../configs") // Set the directory path where the config file is located
 
 	// Read the configuration file
 	err := viper.ReadInConfig() // Read the config file and handle any errors

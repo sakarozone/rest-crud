@@ -4,6 +4,7 @@ import (
 	"learngo/restapiserver/pkg/common/db"
 	model "learngo/restapiserver/pkg/movies/models"
 	"net/http"
+	"regexp"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -11,7 +12,6 @@ import (
 
 func Signup(c *gin.Context) {
 	//Get email and pass from the body
-
 	var body struct {
 		Email    string
 		Password string
@@ -20,6 +20,17 @@ func Signup(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Payload"})
+		return
+	}
+
+	//Check if email and password are valid
+	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+	if !emailRegex.MatchString(body.Email) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email format"})
+		return
+	}
+	if len(body.Password) < 8 || !containsSpecialChar(body.Password) || !containsUpperCase(body.Password) || !containsNumber(body.Password) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Password must have length of 8 characters, one uppercase, one number and one special charater"})
 		return
 	}
 
@@ -47,3 +58,8 @@ func Signup(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": "Created successfully"})
 
 }
+
+// {
+//     "email":"sakar@test.com",
+//     "password":"testA@LK?lasdf11k?>?@"
+// }
